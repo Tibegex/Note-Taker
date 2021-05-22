@@ -16,6 +16,16 @@ app.use(express.json());
 
 //Routes
 
+app.post("/api/notes", (req, res) => {
+  const newNote = req.body;
+  console.log(newNote);
+  const noteList = fs.readFileSync(
+    path.join(__dirname, "/Develop/db/db.json"),
+    { encoding: "utf-8" }
+  );
+  console.log(noteList);
+});
+
 app.get("/api/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "/Develop/db/db.json"))
 );
