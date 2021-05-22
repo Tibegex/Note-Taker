@@ -18,12 +18,22 @@ app.use(express.json());
 
 app.post("/api/notes", (req, res) => {
   const newNote = req.body;
-  console.log(newNote);
-  const noteList = fs.readFileSync(
-    path.join(__dirname, "/Develop/db/db.json"),
-    { encoding: "utf-8" }
+  const noteList = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "/Develop/db/db.json"), {
+      encoding: "utf-8",
+    })
   );
-  console.log(noteList);
+  if (noteList.length === 0) {
+    newNote.id = 0;
+  } else {
+    newNote.id = noteList[noteList.length - 1].id + 1;
+  }
+  noteList.push(newNote);
+  fs.writeFileSync(
+    path.join(__dirname, "/Develop/db/db.json"),
+    JSON.stringify(noteList)
+  );
+  res.json(newNote);
 });
 
 app.get("/api/notes", (req, res) =>
